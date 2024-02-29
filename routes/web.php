@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use Faker\Factory as Faker;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function() {
+    return view('pages.user.home');
+});
+
+Route::get('/test', function() {
+    $faker = Faker::create();
+    // add provider for states and cities
+
+    //    $faker->addProvider(new \Faker\Provider\en_US\Address($faker));
+//    $faker->addProvider(new \Faker\Provider\en_US\Address($faker));
+    //    $faker->addProvider(new \Faker\Provider\en_AU\Address($faker));
+    dd($faker->state);
 });
