@@ -10,13 +10,17 @@
                 </div>
 
                 <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25"> Help & FAQs </a>
+                    @if(\Illuminate\Support\Facades\Session::exists('authUser'))
+                        <form action="{{route('logout')}}" method="POST"
+                              class="flex-c-m trans-04 p-lr-25 font-primary text-sm border-1">
+                            @csrf
+                            <input type="submit" value="Logout" class="bg-transparent "/>
+                        </form>
 
-                    <a href="#" class="flex-c-m trans-04 p-lr-25"> My Account </a>
-
-                    <a href="#" class="flex-c-m trans-04 p-lr-25"> EN </a>
-
-                    <a href="#" class="flex-c-m trans-04 p-lr-25"> USD </a>
+                        <a href="{{route('profile')}}" class="flex-c-m trans-04 p-lr-25"> My Account </a>
+                    @else
+                        <a href="{{route('login')}}" class="flex-c-m trans-04 p-lr-25">Login</a>
+                    @endif
                 </div>
             </div>
         </div>

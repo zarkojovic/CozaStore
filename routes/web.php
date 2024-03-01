@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 use Faker\Factory as Faker;
@@ -15,16 +16,38 @@ use Faker\Factory as Faker;
 |
 */
 
+// GROUP GUEST ROUTES
+Route::middleware(['guest'])->group(function() {
+    Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
+    Route::post('/login', [AuthController::class, 'checkLogin'])
+        ->name('login.check');
+
+    Route::get('/register', [AuthController::class, 'registerPage'])
+        ->name('register');
+    Route::post('/register', [AuthController::class, 'checkRegister'])
+        ->name('register.check');
+
+    Route::get('/forgot-password', function() {
+        return view('pages.guest.forgotPassword');
+    })->name('forgot-password');
+});
+
 Route::get('/', function() {
     return view('pages.user.home');
+})->name('home');
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
+
+Route::get('/profile', function() {
+    return '1';
+})->name('profile');
+Route::get('/admin', function() {
+    return view('pages.admin.home');
 });
 
 Route::get('/test', function() {
-    $faker = Faker::create();
-    // add provider for states and cities
+    dd(\Illuminate\Support\Facades\Session::exists('authUser'));
+    $item = \App\Models\Product::find(1);
 
-    //    $faker->addProvider(new \Faker\Provider\en_US\Address($faker));
-//    $faker->addProvider(new \Faker\Provider\en_US\Address($faker));
-    //    $faker->addProvider(new \Faker\Provider\en_AU\Address($faker));
-    dd($faker->state);
+    return $item->images;
 });

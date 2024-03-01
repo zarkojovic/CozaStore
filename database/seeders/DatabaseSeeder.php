@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder {
             ProductSeeder::class,
             ProductImageSeeder::class,
             PriceSeeder::class,
+            ActionSeeder::class,
         ]);
     }
 
