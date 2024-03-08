@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', FALSE),
 
     /*
     |--------------------------------------------------------------------------
@@ -182,6 +182,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        //        'Image' => Intervention\Image\Facades\Image::class,
+
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

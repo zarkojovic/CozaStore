@@ -1,5 +1,21 @@
-<!-- Header -->
-<header>
+@php
+    //$cartItems = 0;
+    //$wishItems = 0;
+        $userExists =  Illuminate\Support\Facades\Session::has('authUser');
+        if($userExists){
+          if(Illuminate\Support\Facades\Session::get('authUser')->carts()->where('is_ordered', 0)->first()){
+            $cartItems = Illuminate\Support\Facades\Session::get('authUser')->carts()->where('is_ordered', 0)->first()->cartItems()->count();
+          }else{
+            $cartItems = 0;
+          }
+        }else{
+            $cartItems = 0;
+        }
+        $wishItems = Illuminate\Support\Facades\Session::has('authUser') ? Illuminate\Support\Facades\Session::get('authUser')->products()->get()->count() : 0;
+@endphp
+
+    <!-- Header -->
+<header class="@yield('header-class')">
     <!-- Header desktop -->
     <div class="container-menu-desktop">
         <!-- Topbar -->
@@ -28,41 +44,18 @@
         <div class="wrap-menu-desktop">
             <nav class="limiter-menu-desktop container">
                 <!-- Logo desktop -->
-                <a href="#" class="logo">
+                <a href="{{route('home')}}" class="logo">
                     <img src="{{asset('assets/images/icons/logo-01.png')}}" alt="IMG-LOGO"/>
                 </a>
 
                 <!-- Menu desktop -->
                 <div class="menu-desktop">
                     <ul class="main-menu">
-                        <li class="active-menu">
-                            <a href="index.html">Home</a>
-                            <ul class="sub-menu">
-                                <li><a href="index.html">Homepage 1</a></li>
-                                <li><a href="home-02.html">Homepage 2</a></li>
-                                <li><a href="home-03.html">Homepage 3</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="product.html">Shop</a>
-                        </li>
-
-                        <li class="label1" data-label1="hot">
-                            <a href="shoping-cart.html">Features</a>
-                        </li>
-
-                        <li>
-                            <a href="blog.html">Blog</a>
-                        </li>
-
-                        <li>
-                            <a href="about.html">About</a>
-                        </li>
-
-                        <li>
-                            <a href="contact.html">Contact</a>
-                        </li>
+                        @foreach($links as $link)
+                            <li>
+                                <a href="{{route($link['route'])}}">{{$link['name']}}</a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
 
@@ -76,15 +69,17 @@
 
                     <div
                         class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-                        data-notify="2"
+                        id="cartIndicator"
+                        data-notify="{{$cartItems}}"
                     >
                         <i class="zmdi zmdi-shopping-cart"></i>
                     </div>
 
                     <a
                         href="#"
-                        class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-                        data-notify="0"
+                        id="wishIndicator"
+                        class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-wishlist"
+                        data-notify="{{$wishItems}}"
                     >
                         <i class="zmdi zmdi-favorite-outline"></i>
                     </a>

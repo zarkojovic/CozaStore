@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Session;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable {
@@ -22,6 +23,7 @@ class User extends Authenticatable {
         'name',
         'email',
         'password',
+        'username',
     ];
 
     /**
@@ -44,6 +46,48 @@ class User extends Authenticatable {
         'password' => 'hashed',
     ];
 
+    public static function getCartItems($id) {
+        $user = User::find($id);
+        $cart = $user->carts()->where('is_ordered', 0)->first();
+        if ($cart === NULL) {
+            return [
+            ];
+        }
+        $cartItems = $cart->cartItems;
+
+        // Retrieve quantity of each product in the cart, image, price, color and size
+        $products = [];
+        foreach ($cartItems as $cartItem) {
+            $product = $cartItem->product;
+            $products[] = [
+                'id' => $product->id,
+                'cartitem_id' => $cartItem->id,
+                'title' => $product->title,
+                'image' => $product->images()->first()->image,
+                'price' => $product->price[0]->price,
+                'color' => $cartItem->color->color_name,
+                'size' => $cartItem->size->size_name,
+                'color_id' => $cartItem->color->id,
+                'size_id' => $cartItem->size->id,
+                'quantity' => $cartItem->quantity,
+                'total' => $product->price[0]->price * $cartItem->quantity,
+            ];
+        }
+
+        // calculate total price of the cart
+        $totalPrice = 0;
+        foreach ($products as $product) {
+            $totalPrice += $product['price'] * $product['quantity'];
+        }
+        // round on 2 decimal places
+        $totalPrice = round($totalPrice, 2);
+
+        return [
+            'products' => $products,
+            'totalPrice' => $totalPrice,
+        ];
+    }
+
     /**
      * User Relationships
      */
@@ -57,7 +101,7 @@ class User extends Authenticatable {
     }
 
     public function city() {
-        return $this->hasOne(City::class);
+        return $this->hasOne(City::class, 'id', 'city_id');
     }
 
     public function carts() {

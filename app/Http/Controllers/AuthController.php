@@ -37,20 +37,19 @@ class AuthController extends Controller {
     }
 
     public function checkRegister(RegisterRequest $request) {
+        //        dd($request->all());
         try {
             // Create a new User instance
             $newUser = new User();
 
             // Assign values from the request to the User instance
-            $newUser->fill([
-                'first_name' => $request->input('first_name'),
-                'last_name' => $request->input('last_name'),
-                'username' => $request->input('username'),
-                'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
-                'phone' => $request->input('phone'),
-                'role_id' => 2,
-            ]);
+            $newUser->first_name = $request->input('first_name');
+            $newUser->last_name = $request->input('last_name');
+            $newUser->username = 'test';
+            $newUser->email = $request->input('email');
+            $newUser->password = Hash::make($request->input('password'));
+            $newUser->phone = $request->input('phone');
+            $newUser->role_id = 2;
 
             // Save the new user to the database
             if ($newUser->save()) {

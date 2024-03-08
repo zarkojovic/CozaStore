@@ -112,6 +112,10 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 [ Slick2 ]*/
 .slick-slide {outline: none !important;}
 
+* {
+
+    font-family: Poppins-Regular;
+}
 
 /*//////////////////////////////////////////////////////////////////
 [ LOADDING ]*/
@@ -856,7 +860,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
-    -moz-transition: all 0.34;
+    -moz-transition: all 0.34s;
     transition: all 0.4s;
 
     box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.18);
@@ -913,7 +917,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
-    -moz-transition: all 0.34;
+    -moz-transition: all 0.34s;
     transition: all 0.4s;
 }
 
@@ -1661,6 +1665,14 @@ button.mfp-close {
 .swal-button:focus {
     outline: none;
     box-shadow: none;
+}
+
+.bg-main {
+    background-color: #717fe0 !important;
+}
+
+.text-main {
+    color: #717fe0 !important;
 }
 
 .swal-button {
@@ -3330,3 +3342,4 @@ input.num-product::-webkit-inner-spin-button {
     }
 
 }
+

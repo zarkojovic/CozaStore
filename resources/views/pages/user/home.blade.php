@@ -11,8 +11,6 @@
 
 @section('content')
 
-    @include('includes.user.cart')
-
     @include('includes.user.slider')
 
     @include('includes.user.banner')
@@ -20,6 +18,5 @@
     @include('includes.user.product')
 
     @include('includes.user.modal')
-
 
 @endsection

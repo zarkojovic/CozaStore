@@ -13,8 +13,12 @@
 
 @yield('content')
 
+
+@include('includes.user.cart')
 @include('fixed.user.backToTop')
 @include('fixed.user.footer')
 @include('fixed.user.scripts')
+
+
 </body>
 </html>

@@ -15,10 +15,10 @@ class ProductImageSeeder extends Seeder {
     public function run(): void {
         $faker = Faker::create();
 
-        for ($i = 1; $i < 11; $i++) {
+        for ($i = 1; $i < 41; $i++) {
             ProductImage::create([
                 'product_id' => $i,
-                'image' => $faker->imageUrl(640, 480, 'animals', TRUE),
+                'image' => $faker->imageUrl(480, 640, 'animals', TRUE),
             ]);
         }
     }

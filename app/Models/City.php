@@ -22,7 +22,7 @@ class City extends Model {
      * City Relationships
      */
     public function users() {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function country() {
