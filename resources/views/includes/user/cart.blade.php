@@ -16,27 +16,33 @@
         <ul class="header-cart-content flex-w js-pscroll">
             <ul class="header-cart-wrapitem w-full" id="cartSidebarWrap">
                 @if(Illuminate\Support\Facades\Session::has('authUser') ? $userCarts = \App\Models\User::getCartItems(Illuminate\Support\Facades\Session::get('authUser')->id) : $userCarts = [] )
-                    @foreach($userCarts['products'] as $cartItem)
-                        <li class="header-cart-item flex-w flex-t m-b-12">
-                            <div class="header-cart-item-img cartItem" data-id="{{$cartItem['id']}}"
-                                 data-color-id="{{$cartItem['color_id']}}" data-size-id="{{$cartItem['size_id']}}">
-                                <img src="{{$cartItem['image']}}" alt="IMG"/>
-                            </div>
 
-                            <div class="header-cart-item-txt p-t-8">
-                                <a
-                                    href="{{route('product.show', ['id' => $cartItem['id']])}}"
-                                    class="header-cart-item-name  hov-cl1 trans-04"
-                                >
-                                    {{$cartItem['title']}}
-                                </a>
-                                <span>{{$cartItem['size']}}</span>
-                                <span>{{$cartItem['color']}}</span>
-                                <span
-                                    class="header-cart-item-info"> {{$cartItem['quantity']}} x ${{$cartItem['price']}} </span>
-                            </div>
-                        </li>
-                    @endforeach
+                    @if(count($userCarts) == 0)
+                        <h1 class="text-center">No items in cart</h1>
+
+                    @else
+                        @foreach($userCarts['products'] as $cartItem)
+                            <li class="header-cart-item flex-w flex-t m-b-12">
+                                <div class="header-cart-item-img cartItem" data-id="{{$cartItem['id']}}"
+                                     data-color-id="{{$cartItem['color_id']}}" data-size-id="{{$cartItem['size_id']}}">
+                                    <img src="{{$cartItem['image']}}" alt="IMG"/>
+                                </div>
+
+                                <div class="header-cart-item-txt p-t-8">
+                                    <a
+                                        href="{{route('product.show', ['id' => $cartItem['id']])}}"
+                                        class="header-cart-item-name  hov-cl1 trans-04"
+                                    >
+                                        {{$cartItem['title']}}
+                                    </a>
+                                    <span>{{$cartItem['size']}}</span>
+                                    <span>{{$cartItem['color']}}</span>
+                                    <span
+                                        class="header-cart-item-info"> {{$cartItem['quantity']}} x ${{$cartItem['price']}} </span>
+                                </div>
+                            </li>
+                        @endforeach
+                    @endif
             </ul>
 
             <div class="w-full">
@@ -53,6 +59,7 @@
                 </div>
             </div>
             @else
+                <h1 class="h4 text-center">No items yet...</h1>
         </ul>
         @endif
     </div>

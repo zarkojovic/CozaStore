@@ -25,7 +25,6 @@ class UserController extends Controller {
             ->orderBy('carts.created_at', 'desc')
             ->get();
 
-//        dd($orders[0]->cartItems[0]->product->title);
         return view('pages.user.profile',
             [
                 'auth' => $auth,

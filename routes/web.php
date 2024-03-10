@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\AdminRoleController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -79,43 +82,56 @@ Route::middleware(['auth'])->group(function() {
         [UserController::class, 'updatePassword'])
         ->name('user.password.update');
 
-    //API ROUTES
-    Route::post('/api/getCitiesFromCountry',
-        [CityController::class, 'getCitiesFromCountry'])
-        ->name('api.cities');
-    Route::post('/api/addToWish',
-        [ProductController::class, 'addToWish'])
-        ->name('api.wish');
-    Route::post('/api/getWishlistCount',
-        [ProductController::class, 'getWishlistCount'])
-        ->name('api.wishlist.count');
-    Route::post('/api/getProductInfo',
-        [ProductController::class, 'getProductInfo'])
-        ->name('api.product.info');
-    Route::post('/api/addToCart',
-        [CartController::class, 'addToCart'])
-        ->name('api.cart.add');
-    // remove from cart
-    Route::post('/api/removeFromCart',
-        [CartController::class, 'removeFromCart'])
-        ->name('api.cart.remove');
     // Make order from cart
     Route::post('/cart/order',
         [CartController::class, 'order'])
         ->name('order.store');
+
+    //API ROUTES
+    // GROUP AUTH ROUTES
+    Route::prefix('api')->group(function() {
+        Route::post('/getCitiesFromCountry',
+            [CityController::class, 'getCitiesFromCountry'])
+            ->name('api.cities');
+        Route::post('/addToWish',
+            [ProductController::class, 'addToWish'])
+            ->name('api.wish');
+        Route::post('/getWishlistCount',
+            [ProductController::class, 'getWishlistCount'])
+            ->name('api.wishlist.count');
+        Route::post('/getProductInfo',
+            [ProductController::class, 'getProductInfo'])
+            ->name('api.product.info');
+        Route::post('/addToCart',
+            [CartController::class, 'addToCart'])
+            ->name('api.cart.add');
+        // remove from cart
+        Route::post('/removeFromCart',
+            [CartController::class, 'removeFromCart'])
+            ->name('api.cart.remove');
+    });
 });
 
 // GROUP AUTH ROUTES
 Route::middleware(['admin'])->prefix('admin')->group(function() {
     Route::get('/', function() {
         return view('pages.admin.home');
-    });
+    })->name('admin.home');
+
+    // Admin user routes
+    Route::resource('users', AdminUserController::class);
+    // Admin role routes
+    Route::resource('roles', AdminRoleController::class);
 });
 
 // NEUTRAL ROUTES
 Route::post('/api/getProducts',
     [ProductController::class, 'getProducts'])
     ->name('api.products');
+
+// Send contact mail
+Route::post('/send-email', [ContactController::class, 'sendMail'])
+    ->name('contact.email.send');
 
 Route::get('/about', function() {
     return 1;
@@ -125,7 +141,7 @@ Route::get('/services', function() {
     return 1;
 })->name('services');
 
-Route::get('/contact', [UserController::class,'sendContact'])->name('contact');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
 Route::get('/author', function() {
     return 1;

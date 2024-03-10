@@ -413,9 +413,11 @@
                         });
 
                         let pagination = '';
-                        for (let i = 1; i <= response.last_page; i++) {
-                            pagination += `<button data-url="${i}" class="flex-c-m how-pagination1 paginate-link trans-04 m-all-7` +
-                                (i === response.current_page ? ' active-pagination1' : '') + `">${i}</button>`;
+                        if (response.last_page > 1) {
+                            for (let i = 1; i <= response.last_page; i++) {
+                                pagination += `<button data-url="${i}" class="flex-c-m how-pagination1 paginate-link trans-04 m-all-7` +
+                                    (i === response.current_page ? ' active-pagination1' : '') + `">${i}</button>`;
+                            }
                         }
 
                         $('#productPagination').html(pagination);

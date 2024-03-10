@@ -32,8 +32,12 @@
                             @csrf
                             <input type="submit" value="Logout" class="bg-transparent "/>
                         </form>
-
                         <a href="{{route('profile')}}" class="flex-c-m trans-04 p-lr-25"> My Account </a>
+
+                        @if(\Illuminate\Support\Facades\Session::get('authUser')->role->role_name === 'admin')
+                            <a href="{{route('admin.home')}}" class="flex-c-m trans-04 p-lr-25"> Admin </a>
+
+                        @endif
                     @else
                         <a href="{{route('login')}}" class="flex-c-m trans-04 p-lr-25">Login</a>
                     @endif

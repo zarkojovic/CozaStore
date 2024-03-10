@@ -7,7 +7,7 @@
 
     <title>@yield('title')</title>
 
-    <meta name="description" content="@yield('description')"/>
+    @yield('metaTags')
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon/favicon.ico')}}"/>

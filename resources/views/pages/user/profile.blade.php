@@ -102,7 +102,6 @@
                     $('#city_id').attr('disabled', 'disabled');
                     return;
                 }
-
                 loadCities();
             });
 

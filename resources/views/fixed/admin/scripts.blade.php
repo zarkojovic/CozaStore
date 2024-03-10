@@ -19,3 +19,31 @@
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="{{asset('assets/vendor/jquery/jquery-3.2.1.min.js')}}"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        },
+    });
+
+    function ajaxCallback(url, method, data, successCallback, errorCallback) {
+        $.ajax({
+            url: url,
+            method: method,
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(responseData) {
+                successCallback(responseData);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                errorCallback(errorThrown || textStatus);
+            },
+        });
+    }
+
+
+
+</script>
+
+@yield('custom-scripts')

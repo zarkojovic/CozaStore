@@ -252,9 +252,12 @@
 
     function updateCartSidebar(itemsToPrint) {
         let html = '';
-        itemsToPrint.products.forEach((item) => {
-            html +=
-                `<li class="header-cart-item flex-w flex-t m-b-12">
+        itemsToPrint.length === 0
+            ? html = '<h1 class="h4 text-center">No items yet...</h1>'
+            :
+            itemsToPrint.products.forEach((item) => {
+                html +=
+                    `<li class="header-cart-item flex-w flex-t m-b-12">
                         <div class="header-cart-item-img cartItem" data-id="${item.id}"
                              data-color-id="${item.color_id}" data-size-id="${item.size_id}">
                             <img src="${item.image}" alt="IMG"/>
@@ -268,8 +271,7 @@
                             <span class="header-cart-item-info">${item.quantity} x ${item.price}</span>
                         </div>
                 </li>`;
-        });
-        console.log(html);
+            });
 
         $('#cartSidebarWrap').html(html);
 
@@ -279,8 +281,11 @@
     function updateWishSidebar(itemsToPrint) {
 
         let html = '';
-        itemsToPrint.forEach((item) => {
-            html += `<li class="header-cart-item flex-w flex-t m-b-12">
+        itemsToPrint.length === 0
+            ? html = '<h1 class="h4 text-center">No items yet...</h1>'
+            :
+            itemsToPrint.forEach((item) => {
+                html += `<li class="header-cart-item flex-w flex-t m-b-12">
                             <div class="header-cart-item-img wishlistItem" data-id="${item.id}">
                                 <img src="${item.images[0].image}" alt="IMG"/>
                             </div>
@@ -298,7 +303,7 @@
                 class="header-cart-item-info"> $${item.price[0].price}</span>
                             </div>
                         </li>`;
-        });
+            });
 
         $('#wishSidebarWrap').html(html);
     }
@@ -306,6 +311,17 @@
     function updateWishIndicator(value) {
         $('#wishIndicator').attr('data-notify', value);
     }
+
+    @php
+        $sentMail = session('sentMail');
+        session()->forget('sentMail');
+    @endphp
+    var valueFromController = @json($sentMail);
+    // Now 'valueFromController' is a JavaScript variable accessible in your front-end scripts
+    if (valueFromController) {
+        toastr.success('Your message has been sent successfully');
+    }
+
 
 </script>
 
