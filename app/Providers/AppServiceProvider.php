@@ -30,10 +30,6 @@ class AppServiceProvider extends ServiceProvider {
                 'route' => 'home',
             ],
             [
-                'name' => 'Services',
-                'route' => 'services',
-            ],
-            [
                 'name' => 'Contact',
                 'route' => 'contact',
             ],
@@ -85,7 +81,7 @@ class AppServiceProvider extends ServiceProvider {
             ],
             [
                 'name' => '$200.00+',
-                'value' => '200+',
+                'value' => '200-1000',
             ],
         ];
 
@@ -93,17 +89,50 @@ class AppServiceProvider extends ServiceProvider {
             $user = Session::get('authUser');
             view()->share('user', $user);
         }
-        //        dd(Session::get('authUser'));
 
-        //        $wishlistCount = Session::get('authUser')->products->count();
+        $slides = [
+            [
+                'image' => 'slide-01.jpg',
+                'title' => 'New Arrivals',
+                'description' => 'Check out our latest products',
+            ],
+            [
+                'image' => 'slide-02.jpg',
+                'title' => 'Summer Collection',
+                'description' => 'Check out our latest products',
+            ],
+            [
+                'image' => 'slide-03.jpg',
+                'title' => 'Summer Collection',
+                'description' => 'Check out our latest products',
+            ],
 
-        //        view()->share('wishlistCount', $wishlistCount);
-        //        }
+        ];
 
+        $banners = [
+            [
+                'title' => 'Women',
+                'description' => 'Check out our latest products',
+                'image' => 'banner-01.jpg',
+            ],
+            [
+                'title' => 'Men',
+                'description' => 'Check out our latest products',
+                'image' => 'banner-02.jpg',
+            ],
+            [
+                'title' => 'Accessories',
+                'description' => 'Check out our latest products',
+                'image' => 'banner-03.jpg',
+            ],
+        ];
+
+        view()->share('slides', $slides);
         view()->share('prices', $prices);
         view()->share('tags', $tags);
         view()->share('colors', $colors);
         view()->share('categories', $categories);
+        view()->share('banners', $banners);
         view()->share('sortings', $sortings);
     }
 

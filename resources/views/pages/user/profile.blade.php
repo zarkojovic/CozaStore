@@ -28,9 +28,6 @@
             <button class="nav-link active ms-0"
                     data-filter=".security">Security
             </button>
-            <button class="nav-link active ms-0"
-                    data-filter=".notifications">Notifications
-            </button>
         </nav>
         <hr class="mt-0 mb-4">
         <div class="isotope-grid" data-default-filter=".information">
@@ -88,12 +85,12 @@
                     });
             }
 
-            if ($('#country').val() === '0') {
-                $('#city_id').html('<option value="0">Select City</option>');
-                $('#city_id').attr('disabled', 'disabled');
-            } else {
-                loadCities();
-            }
+            // if ($('#country').val() === '0') {
+            //     $('#city_id').html('<option value="0">Select City</option>');
+            //     // $('#city_id').attr('disabled', 'disabled');
+            // } else {
+            //     loadCities();
+            // }
 
             $('#country').change(function() {
                 let country_id = $(this).val();
@@ -120,7 +117,7 @@
                     email: $('#email').val(),
                     phone: $('#phone').val(),
                 };
-                console.log(formData);
+
                 ajaxCallback(
                     url,
                     method,

@@ -33,7 +33,7 @@ class ProductController extends Controller {
             return response()->json([
                 'status' => 'exists',
                 'wishlistItems' => $user->products()
-                    ->with(['images', 'price'])
+                    ->with(['images'])
                     ->get(),
                 'numberOfProducts' => $user->products()->get()->count(),
             ]);
@@ -43,7 +43,7 @@ class ProductController extends Controller {
         return response()->json([
             'status' => 'success',
             'wishlistItems' => $user->products()
-                ->with(['images', 'price'])
+                ->with(['images'])
                 ->get(),
             'numberOfProducts' => $user->products()->get()->count(),
         ]);

@@ -25,7 +25,7 @@
                             <li class="header-cart-item flex-w flex-t m-b-12">
                                 <div class="header-cart-item-img cartItem" data-id="{{$cartItem['id']}}"
                                      data-color-id="{{$cartItem['color_id']}}" data-size-id="{{$cartItem['size_id']}}">
-                                    <img src="{{$cartItem['image']}}" alt="IMG"/>
+                                    <img src="{{asset('/assets/images')}}/{{$cartItem['image']}}" alt="IMG"/>
                                 </div>
 
                                 <div class="header-cart-item-txt p-t-8">
@@ -83,26 +83,31 @@
         <div class="header-cart-content flex-w js-pscroll">
             @if(Illuminate\Support\Facades\Session::has('authUser') ? $userWishlist = \App\Models\User::find(Illuminate\Support\Facades\Session::get('authUser')->id)->products()->get() : $userWishlist = [] )
                 <ul class="header-cart-wrapitem w-full" id="wishSidebarWrap">
-                    @foreach($userWishlist as $wishItem)
-                        <li class="header-cart-item flex-w flex-t m-b-12">
-                            <div class="header-cart-item-img wishlistItem" data-id="{{$wishItem->id}}">
-                                <img src="{{$wishItem->images->first()->image}}" alt="IMG"/>
-                            </div>
-                            <div>
+                    @if(count($userWishlist) == 0)
+                        <p class="text-center">No items in wishlist...</p>
+                    @else
+                        @foreach($userWishlist as $wishItem)
+                            <li class="header-cart-item flex-w flex-t m-b-12">
+                                <div class="header-cart-item-img wishlistItem" data-id="{{$wishItem->id}}">
+                                    <img src="{{asset('/assets/images')}}/{{$wishItem->images->first()->image}}"
+                                         alt="IMG"/>
+                                </div>
+                                <div>
 
-                            </div>
-                            <div class="header-cart-item-txt p-t-8">
-                                <a
-                                    href="{{route('product.show', ['id' => $wishItem->id])}}"
-                                    class="header-cart-item-name  hov-cl1 trans-04"
-                                >
-                                    {{$wishItem->title}}
-                                </a>
-                                <span
-                                    class="header-cart-item-info"> ${{$wishItem->price->first()->price}} </span>
-                            </div>
-                        </li>
-                    @endforeach
+                                </div>
+                                <div class="header-cart-item-txt p-t-8">
+                                    <a
+                                        href="{{route('product.show', ['id' => $wishItem->id])}}"
+                                        class="header-cart-item-name  hov-cl1 trans-04"
+                                    >
+                                        {{$wishItem->title}}
+                                    </a>
+                                    <span
+                                        class="header-cart-item-info"> ${{$wishItem->price}} </span>
+                                </div>
+                            </li>
+                        @endforeach
+                    @endif
                 </ul>
             @endif
         </div>

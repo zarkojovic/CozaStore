@@ -57,22 +57,33 @@
 
                             <select class="form-control" id="country">
                                 <option value="0">Select Country</option>
+                                {{$country_id}}
                                 @foreach($countries as $country)
                                     <option value="{{$country->id}}"
-                                            @if($country_id == $country->id) selected="selected" @endif>{{$country->country_name}}</option>
+                                            @if($country_id == $country->id) selected @endif>{{$country->country_name}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <!-- Form Group (location)-->
                         <div class="col-md-6">
                             <label class="small mb-1" for="city_id">City</label>
-                            <select class="form-control"
-                                    id="city_id"
-                                    data-selected-id="{{$auth->city_id}}"
-                                    disabled="disabled"
-                                    name="city_id">
-                                <option value="0">Select City</option>
-                            </select>
+                            @if($auth->city_id == NULL)
+                                <select class="form-control" id="city_id" data-selected-id="0" disabled="disabled"
+                                        name="city_id">
+                                    <option value="0">Select City</option>
+                                </select>
+                            @else
+                                <select class="form-control"
+                                        id="city_id"
+                                        data-selected-id="{{$auth->city_id}}"
+                                        name="city_id">
+                                    <option value="0">Select City</option>
+                                    @foreach($cities as $city)
+                                        <option value="{{$city->id}}"
+                                                @if($auth->city_id == $city->id) selected @endif>{{$city->city_name}}</option>
+                                    @endforeach
+                                </select>
+                            @endif
                         </div>
                     </div>
                     <!-- Form Group (address)-->

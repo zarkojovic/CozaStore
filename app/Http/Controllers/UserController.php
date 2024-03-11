@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\ProfileRequest;
+use App\Models\City;
 use App\Models\Country;
+use App\Models\Log;
 use App\Models\Product;
 use App\Services\ImageHandleService;
 use Illuminate\Http\Request;
@@ -18,6 +20,7 @@ class UserController extends Controller {
         $auth = Session::get('authUser');
 
         $countries = Country::select('country_name', 'id')->get();
+        $cities = City::select('city_name', 'id')->get();
 
         $orders = $auth->carts()
             ->with(['cartItems'])
@@ -30,6 +33,7 @@ class UserController extends Controller {
                 'auth' => $auth,
                 'countries' => $countries,
                 'orders' => $orders,
+                'cities' => $cities,
                 'country_id' => $auth->city->country_id ?? '0',
             ]);
     }
@@ -83,6 +87,8 @@ class UserController extends Controller {
             // Save the changes to the database
             $auth->save();
 
+            Log::informationLog('User updated profile:'.$auth->username,
+                $auth->id);
             // Commit the database transaction
             DB::commit();
 
@@ -95,6 +101,7 @@ class UserController extends Controller {
             // Rollback the transaction in case of an error
             DB::rollBack();
 
+            Log::errorLog($e->getMessage(), $auth->id);
             return response()->json([
                 'status' => 500,
                 'message' => 'Failed to update profile',
@@ -134,6 +141,7 @@ class UserController extends Controller {
             // Rollback the transaction in case of an error
             DB::rollBack();
 
+            Log::errorLog($e->getMessage(), $auth->id);
             return redirect()
                 ->route('profile')
                 ->with('error', 'Failed to update password: '.$e->getMessage());

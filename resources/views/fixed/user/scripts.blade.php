@@ -103,8 +103,11 @@
 <script src="{{asset('assets/js/main.js')}}"></script>
 <!--===============================================================================================-->
 
+@php
+    $isUser = \Illuminate\Support\Facades\Session::has('authUser');
+@endphp
 <script>
-
+    const isUser = @json($isUser);
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -127,6 +130,11 @@
     }
 
     $(document).on('click', '#addToCart', function() {
+
+        if (!isUser) {
+            toastr.error('You need to login first');
+            return;
+        }
 
         // Check if size and color are selected
         if ($('#sizeSelect').val() === '0' || $('#colorSelect').val() === '0') {
@@ -194,6 +202,11 @@
     });
 
     $(document).on('click', '.cartItem', function() {
+
+        if (!isUser) {
+            toastr.error('You need to login first');
+            return;
+        }
         let cartItemId = $(this).data('id');
         let sizeId = $(this).data('size-id');
         let colorId = $(this).data('color-id');
@@ -221,6 +234,12 @@
     });
 
     $(document).on('click', '.wishlistItem', function() {
+
+        if (!isUser) {
+            toastr.error('You need to login first');
+            return;
+        }
+
         let wishItemId = $(this).data('id');
         ajaxCallback(
             '{{route('api.wish')}}',
@@ -260,7 +279,7 @@
                     `<li class="header-cart-item flex-w flex-t m-b-12">
                         <div class="header-cart-item-img cartItem" data-id="${item.id}"
                              data-color-id="${item.color_id}" data-size-id="${item.size_id}">
-                            <img src="${item.image}" alt="IMG"/>
+                            <img src="{{asset('/assets/images')}}/${item.image}" alt="IMG"/>
                         </div>
                         <div class="header-cart-item-txt p-t-8">
                             <a href="{{url('/')}}/product/${item.id}" class="header-cart-item-name hov-cl1 trans-04">
@@ -287,7 +306,7 @@
             itemsToPrint.forEach((item) => {
                 html += `<li class="header-cart-item flex-w flex-t m-b-12">
                             <div class="header-cart-item-img wishlistItem" data-id="${item.id}">
-                                <img src="${item.images[0].image}" alt="IMG"/>
+                                <img src="{{asset('/assets/images/')}}/${item.images[0].image}" alt="IMG"/>
                             </div>
                             <div>
 
@@ -300,7 +319,7 @@
                                 ${item.title}
             </a>
             <span
-                class="header-cart-item-info"> $${item.price[0].price}</span>
+                class="header-cart-item-info"> $${item.price}</span>
                             </div>
                         </li>`;
             });

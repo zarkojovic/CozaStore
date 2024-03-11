@@ -14,13 +14,21 @@ class GenericTable extends Component {
 
     public $routeBaseName;
 
+    public $allowDelete = TRUE;
+
     /**
      * Create a new component instance.
      */
-    public function __construct($columns, $items, $routeBaseName) {
+    public function __construct(
+        $columns,
+        $items,
+        $routeBaseName,
+        $allowDelete = TRUE
+    ) {
         $this->columns = $columns;
         $this->items = $items;
         $this->routeBaseName = $routeBaseName;
+        $this->allowDelete = $allowDelete;
     }
 
     /**

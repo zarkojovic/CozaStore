@@ -66,12 +66,6 @@
                 <!-- Icon header -->
                 <div class="wrap-icon-header flex-w flex-r-m">
                     <div
-                        class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search"
-                    >
-                        <i class="zmdi zmdi-search"></i>
-                    </div>
-
-                    <div
                         class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
                         id="cartIndicator"
                         data-notify="{{$cartItems}}"
@@ -139,7 +133,7 @@
         <ul class="topbar-mobile">
             <li>
                 <div class="left-top-bar">
-                    Free shipping for standard order over $100
+{{--                    Free shipping for standard order over $100--}}
                 </div>
             </li>
 

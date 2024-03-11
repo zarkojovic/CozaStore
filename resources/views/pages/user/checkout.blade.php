@@ -231,7 +231,7 @@
                     quantity: quantity,
                 },
                 function(response) {
-                    console.log(response);
+
                     toastr.success('Product added to cart');
                     updateTotalPrice(response.totalPrice);
                     // update the cart sidebar

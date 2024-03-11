@@ -18,8 +18,18 @@ class ProductImageSeeder extends Seeder {
         for ($i = 1; $i < 41; $i++) {
             ProductImage::create([
                 'product_id' => $i,
-                'image' => $faker->imageUrl(480, 640, 'animals', TRUE),
+                'image' => $i < 10 ? 'product-'.'0'.$i.'.jpg' : 'product-'.$i.'.jpg',
             ]);
+            if ($i == 21) {
+                ProductImage::create([
+                    'product_id' => $i,
+                    'image' => 'product-21a.jpg',
+                ]);
+                ProductImage::create([
+                    'product_id' => $i,
+                    'image' => 'product-21b.jpg',
+                ]);
+            }
         }
     }
 

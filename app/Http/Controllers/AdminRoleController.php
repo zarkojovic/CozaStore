@@ -62,27 +62,31 @@ class AdminRoleController extends Controller {
      * Show the form for editing the specified resource.
      */
     public function edit(string $id) {
-        try {
-            $role = Role::find($id);
+        $role = Role::find($id);
 
-            return view('pages.admin.roles.edit',
-                ['action' => 'edit', 'role' => $role]);
-        }
-        catch (\Exception $e) {
-            return redirect()
-                ->route('roles.index')
-                ->with('error', $e->getMessage());
-        }
+        return view('pages.admin.roles.edit',
+            ['action' => 'edit', 'role' => $role]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(AdminRoleUpdateRequest $request, string $id) {
-        // update role
-        $role = Role::find($id);
-        $role->role_name = $request->input('role_name');
-        $role->save();
+        try {
+            $role = Role::findOrFail($id);
+            $role->role_name = $request->input('role_name');
+            if ($role->save()) {
+                return redirect()->route('roles.index');
+            }
+            else {
+                return redirect()
+                    ->back()
+                    ->with('error', 'Failed to update role');
+            }
+        }
+        catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -92,7 +96,7 @@ class AdminRoleController extends Controller {
         // delete role
         try {
             if (Role::destroy($id)) {
-                return redirect()->route('admin.roles.index');
+                return redirect()->route('roles.index');
             }
             else {
                 return redirect()

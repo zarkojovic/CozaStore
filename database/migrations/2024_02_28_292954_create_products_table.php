@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->string('description');
+            $table->decimal('price', 8, 2);
             $table->foreignId('category_id')->constrained('categories');
             $table->timestamps();
         });

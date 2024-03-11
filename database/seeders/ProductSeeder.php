@@ -20,6 +20,7 @@ class ProductSeeder extends Seeder {
             $product->title = $faker->name;
             $product->description = $faker->text;
             $product->category_id = $faker->numberBetween(1, 9);
+            $product->price = $faker->randomFloat(2, 10, 300);
             $product->save();
 
             $product->sizes()->sync($faker->randomElements([1, 2, 3, 4, 5],

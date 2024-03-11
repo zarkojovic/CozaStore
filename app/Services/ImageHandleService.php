@@ -20,4 +20,12 @@ class ImageHandleService {
         }
     }
 
+    public static function uploadProductImage($file, $path) {
+        $extension = $file->getClientOriginalExtension();
+        $fileName = $file->getClientOriginalName().'_'.time().'.'.$extension;
+        $file->move($path, $fileName);
+
+        return $fileName;
+    }
+
 }

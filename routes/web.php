@@ -1,6 +1,15 @@
 <?php
 
+use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminCityController;
+use App\Http\Controllers\AdminColorController;
+use App\Http\Controllers\AdminCountryController;
+use App\Http\Controllers\AdminLogController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminRoleController;
+use App\Http\Controllers\AdminSizeController;
+use App\Http\Controllers\AdminTagController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
@@ -9,7 +18,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Models\Cart;
 use App\Models\City;
+use App\Models\Log;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -99,9 +110,7 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/getWishlistCount',
             [ProductController::class, 'getWishlistCount'])
             ->name('api.wishlist.count');
-        Route::post('/getProductInfo',
-            [ProductController::class, 'getProductInfo'])
-            ->name('api.product.info');
+
         Route::post('/addToCart',
             [CartController::class, 'addToCart'])
             ->name('api.cart.add');
@@ -115,19 +124,66 @@ Route::middleware(['auth'])->group(function() {
 // GROUP AUTH ROUTES
 Route::middleware(['admin'])->prefix('admin')->group(function() {
     Route::get('/', function() {
-        return view('pages.admin.home');
+        // get usersLogins24Hours from the database in logs by searching User logged in keyword
+        $usersLogins24Hours = Log::where('log_message', 'like',
+            '%User logged in%')->where('created_at', '>=',
+            now()->subHours(24))->count();
+        // get $usersLast7Days from the database
+        $usersLast7Days = User::where('created_at', '>=',
+            now()->subDays(7))->count();
+        // get $moneyLast7Days from the database
+        $moneyLast7Days = Cart::where('is_ordered', 1)
+            ->where('created_at', '>=',
+                now()->subDays(7))
+            ->sum('total');
+        // get $mostSoldProduct from the database
+        $mostSoldProduct = 1;
+        // get $ordersLast7Days from the database
+        $ordersLast7Days = Cart::where('is_ordered', 1)
+            ->where('created_at', '>=',
+                now()->subDays(7))
+            ->count();
+
+        return view('pages.admin.home', [
+            'usersLogins24Hours' => $usersLogins24Hours,
+            'usersLast7Days' => $usersLast7Days,
+            'moneyLast7Days' => $moneyLast7Days,
+            'mostSoldProduct' => $mostSoldProduct,
+            'ordersLast7Days' => $ordersLast7Days,
+        ]);
     })->name('admin.home');
 
     // Admin user routes
     Route::resource('users', AdminUserController::class);
     // Admin role routes
     Route::resource('roles', AdminRoleController::class);
+    // Admin product routes
+    Route::resource('products', AdminProductController::class);
+    // Admin country routes
+    Route::resource('countries', AdminCountryController::class);
+    // Admin city routes
+    Route::resource('cities', AdminCityController::class);
+    // Admin order routes
+    Route::resource('orders', AdminOrderController::class);
+    // Admin colors routes
+    Route::resource('colors', AdminColorController::class);
+    // Admin sizes routes
+    Route::resource('sizes', AdminSizeController::class);
+    // Admin categories routes
+    Route::resource('categories', AdminCategoryController::class);
+    // Admin tags routes
+    Route::resource('tags', AdminTagController::class);
+    // Admin logs routes
+    Route::resource('logs', AdminLogController::class);
 });
 
 // NEUTRAL ROUTES
 Route::post('/api/getProducts',
     [ProductController::class, 'getProducts'])
     ->name('api.products');
+Route::post('/api/getProductInfo',
+    [ProductController::class, 'getProductInfo'])
+    ->name('api.product.info');
 
 // Send contact mail
 Route::post('/send-email', [ContactController::class, 'sendMail'])
@@ -144,29 +200,9 @@ Route::get('/services', function() {
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
 Route::get('/author', function() {
-    return 1;
+    return view('pages.user.author');
 })->name('author');
 
 Route::get('/test', function() {
-    // retrieve products from the cart of the user
-    $user = User::find(1);
-    $cart = $user->carts()->where('is_ordered', 0)->first();
-    $cartItems = $cart->cartItems;
-
-    // Retrieve quantity of each product in the cart, image, price, color and size
-    $products = [];
-    foreach ($cartItems as $cartItem) {
-        $product = $cartItem->product;
-        $products[] = [
-            'id' => $product->id,
-            'title' => $product->title,
-            'image' => $product->images()->first()->image,
-            'price' => $product->price[0]->price,
-            'color' => $cartItem->color->color_name,
-            'size' => $cartItem->size->size_name,
-            'quantity' => $cartItem->quantity,
-        ];
-    }
-
-    return $products;
+    Session::forget('authUser');
 });

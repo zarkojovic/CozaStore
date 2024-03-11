@@ -1,5 +1,5 @@
 <!-- Product -->
-<section class="bg0 p-t-23 p-b-140">
+<section class="bg0 p-t-23 p-b-140" id="products">
     <div class="container">
         <div class="p-b-10">
             <h3 class="ltext-103 cl5">Product Overview</h3>
@@ -150,7 +150,7 @@
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
-                            <img src="{{ $p->images->first()->image }}" alt="IMG-PRODUCT"/>
+                            <img src="{{ asset('/assets/images/'. $p->images->first()->image )}}" alt="IMG-PRODUCT"/>
 
                             <button
                                 data-id="{{$p->id}}"
@@ -169,7 +169,7 @@
                                     {{ $p['title'] }}
                                 </a>
 
-                                <span class="stext-105 cl3"> ${{$p->price->first()->price}} </span>
+                                <span class="stext-105 cl3"> ${{$p->price}} </span>
                             </div>
 
                             <div class="block2-txt-child2 flex-r p-t-3">
@@ -220,10 +220,18 @@
     </div>
 </section>
 
+@php
+    $isUser = \Illuminate\Support\Facades\Session::has('authUser');
+@endphp
+
 @section('custom-scripts')
     <script>
 
         $(document).ready(function() {
+
+            let isLoggedIn = {{$isUser ? 1 : 0}};
+
+            console.log(isLoggedIn);
 
             // FILTER HANDLER FOR PRODUCT PAGE
             $(document).on('click', '.paginate-link', function(e) {
@@ -242,6 +250,11 @@
 
             // WISH BUTTON HANDLER FOR PRODUCT PAGE
             $(document).on('click', '.wish-button', function() {
+
+                if (!isLoggedIn) {
+                    toastr.error('You need to login to add items to wishlist');
+                    return;
+                }
                 var that = $(this);
                 var productId = that.data('id');
                 var url = '{{route('api.wish')}}';
@@ -252,6 +265,7 @@
                         product_id: productId,
                     },
                     function(response) {
+                        console.log(response);
                         //update wishIndicator with the new count in numberOfProducts from repsonse
                         $('#wishIndicator').attr('data-notify', response.numberOfProducts);
                         if (response.status === 'success') {
@@ -368,7 +382,7 @@
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
-                            <img src="${p.images[0].image}" alt="IMG-PRODUCT"/>
+                            <img src="{{asset('/assets/images')}}/${p.images[0].image}" alt="IMG-PRODUCT"/>
 
                             <button
                                 data-id="${p.id}"
@@ -387,7 +401,7 @@
                                     ${p.title}
                             </a>
 
-                            <span class="stext-105 cl3"> $ ${p.price[0].price} </span>
+                            <span class="stext-105 cl3"> $ ${p.price} </span>
                             </div>
                             <div class="block2-txt-child2 flex-r p-t-3">
                                 <button
@@ -464,27 +478,29 @@
 
                             <div class="slick3 gallery-lb">
                                 `;
-                        response.image_val.forEach(function(image) {
-                            html += `
+
+                        // response.image_val.forEach(function(image) {
+                        html += `
                                 <div
                                     class="item-slick3"
-                                    data-thumb="${image}"
+                                    data-thumb="{{asset('/assets/images')}}/${response.image_val[0]}"
                                 >
                                     <div class="wrap-pic-w pos-relative">
                                         <img
-                                            src="${image}"
+                                            src="{{asset('/assets/images')}}/${response.image_val[0]}"
                                             alt="IMG-PRODUCT"
                                         />
 
                                         <a
                                             class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                                            href="${image}"
+                                            href="{{asset('/assets/images')}}/${response.image_val[0]}"
                                         >
                                             <i class="fa fa-expand"></i>
                                         </a>
                                     </div>
                                 </div>`;
-                        });
+
+                        // });
                         html += `
                             </div>
                         </div>
@@ -497,7 +513,7 @@
                             ${response.title}
                         </h4>
 
-                        <span class="mtext-106 cl2"> $${response.price_val} </span>
+                        <span class="mtext-106 cl2"> $${response.price} </span>
 
                         <p class="stext-102 cl3 p-t-23">
                             ${response.description}
@@ -576,42 +592,6 @@
                             </div>
                         </div>
 
-                        <!--  -->
-                        <div class="flex-w flex-m p-l-100 p-t-40 respon7">
-                            <div class="flex-m bor9 p-r-10 m-r-11">
-                                <a
-                                    href="#"
-                                    class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100"
-                                    data-tooltip="Add to Wishlist"
-                                >
-                                    <i class="zmdi zmdi-favorite"></i>
-                                </a>
-                            </div>
-
-                            <a
-                                href="#"
-                                class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
-                                data-tooltip="Facebook"
-                            >
-                                <i class="fa fa-facebook"></i>
-                            </a>
-
-                            <a
-                                href="#"
-                                class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
-                                data-tooltip="Twitter"
-                            >
-                                <i class="fa fa-twitter"></i>
-                            </a>
-
-                            <a
-                                href="#"
-                                class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100"
-                                data-tooltip="Google Plus"
-                            >
-                                <i class="fa fa-google-plus"></i>
-                            </a>
-                        </div>
                     </div>
                 </div>
 `;

@@ -28,6 +28,10 @@ class GenericInput extends Component {
 
     public $isDropdown;
 
+    public $isList;
+
+    public $multiple;
+
     /**
      * Create a new component instance.
      */
@@ -41,7 +45,9 @@ class GenericInput extends Component {
         $required = FALSE,
         $readonly = FALSE,
         $items = [],
-        $isDropdown = FALSE
+        $isDropdown = FALSE,
+        $isList = FALSE,
+        $multiple = FALSE
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -53,6 +59,8 @@ class GenericInput extends Component {
         $this->readonly = $readonly;
         $this->items = $items;
         $this->isDropdown = $isDropdown;
+        $this->isList = $isList;
+        $this->multiple = $multiple;
     }
 
     /**

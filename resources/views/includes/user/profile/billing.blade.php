@@ -1,5 +1,5 @@
-<div class="row isotope-item billing w-100">
-    <div class="col-sm-12">
+<div class="row isotope-item billing w-100 h-full">
+    <div class="col-sm-12 ">
         <!-- Account details card-->
         <div class="card mb-4">
             <div class="card-header">Billing</div>
@@ -22,10 +22,12 @@
                                 <div class="panel-body">
 
                                     @foreach($o->cartItems as $c)
-                                        <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center mb-2">
                                             <div>
-                                                <img src="{{$c->product->images->first()->image}}" width="60px"
-                                                     alt="product image">
+                                                <img
+                                                    src="{{asset("assets/images/". $c->product->images->first()->image)}}"
+                                                    width="60px"
+                                                    alt="product image">
                                             </div>
                                             <div class="ml-3">
                                                 <a href="{{route('product.show', ['id' => $c->product->id])}}">
@@ -34,7 +36,7 @@
                                                 </a>
                                                 <span class="text-secondary"> x {{$c->quantity}}</span>
                                                 <p>{{$c->color->color_name}} | {{$c->size->size_name}}</p>
-                                                <p>${{$c->product->price->first()->price}}</p>
+                                                <p>${{$c->product->price}}</p>
                                             </div>
                                         </div>
                                     @endforeach

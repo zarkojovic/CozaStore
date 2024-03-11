@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,6 +24,9 @@ class CartController extends Controller {
                 ->first();
             $cartItem->quantity = $request->quantity;
             $cartItem->save();
+            Log::informationLog('User updated quantity of product'.
+                Product::find($cartItem->product_id)->title.' in cart',
+                Session::get('authUser')->id);
             return User::getCartItems(Session::get('authUser')->id);
         }
 
@@ -64,6 +68,9 @@ class CartController extends Controller {
             'getCartItems' => User::getCartItems($user->id),
         ];
 
+        Log::informationLog('User added product'.$product->title.' to cart',
+            $user->id);
+
         return $items;
     }
 
@@ -84,6 +91,9 @@ class CartController extends Controller {
                 ->first();
             $cartItem->delete();
         }
+
+        Log::informationLog('User removed product'.Product::find($request->product_id)
+                ->get()->title.' from cart', $user->id);
         return [
             'cartItems' => $cart->cartItems()->count(),
             'getCartItems' => User::getCartItems($user->id),
@@ -105,13 +115,13 @@ class CartController extends Controller {
                 'id' => $product->id,
                 'title' => $product->title,
                 'image' => $product->images()->first()->image,
-                'price' => $product->price[0]->price,
+                'price' => $product->price,
                 'color' => $cartItem->color->color_name,
                 'size' => $cartItem->size->size_name,
                 'quantity' => $cartItem->quantity,
                 'color_id' => $cartItem->color->id,
                 'size_id' => $cartItem->size->id,
-                'total' => $cartItem->quantity * $product->price[0]->price,
+                'total' => $cartItem->quantity * $product->price,
             ];
         }
 
@@ -143,9 +153,11 @@ class CartController extends Controller {
         $totalPrice = 0;
         foreach ($cart->cartItems as $cartItem) {
             $product = $cartItem->product;
-            $totalPrice += $product->price[0]->price * $cartItem->quantity;
+            $totalPrice += $product->price * $cartItem->quantity;
         }
         $cart->total = $totalPrice;
+        Log::informationLog('User ordered products, order no:'.$cart->id,
+            $user->id);
         $cart->save();
         return redirect()->route('profile');
     }

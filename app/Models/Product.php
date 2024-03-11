@@ -16,6 +16,8 @@ class Product extends Model {
      */
     protected $fillable = [
         'product_name',
+        'description',
+        'price',
         'category_id',
     ];
 
@@ -24,7 +26,7 @@ class Product extends Model {
      */
     public static function getProducts($request = NULL, $json = FALSE) {
         if ($json) {
-            $products = Product::select('id', 'title', 'category_id')
+            $products = Product::select('id', 'title', 'category_id', 'price')
                 ->offset($request->page);
 
             if ($request->search) {
@@ -45,15 +47,11 @@ class Product extends Model {
                 }
                 elseif ($request->sort === 'price-asc') {
                     // order products by price ascending which is the first price in the price table relationship
-                    $products = $products->join('prices', 'products.id', '=',
-                        'prices.product_id')
-                        ->orderBy('price', 'asc');
+                    $products = $products->orderBy('price', 'asc');
                 }
                 elseif ($request->sort === 'price-desc') {
                     // order products by price descending which is the first price in the price table relationship
-                    $products = $products->join('prices', 'products.id', '=',
-                        'prices.product_id')
-                        ->orderBy('price', 'desc');
+                    $products = $products->orderBy('price', 'desc');
                 }
             }
 
@@ -73,16 +71,14 @@ class Product extends Model {
 
             if ($request->price) {
                 $price = explode('-', $request->price);
-                $products = $products->whereHas('price',
-                    function($query) use ($price) {
-                        $query->whereBetween('price', [$price[0], $price[1]]);
-                    });
+                $products = $products->whereBetween('price',
+                    [$price[0], $price[1]]);
             }
-            $products = $products->with(['price', 'images'])
+            $products = $products->with(['images'])
                 ->paginate(12);
             return $products;
         }
-        $products = Product::select('id', 'title', 'category_id')
+        $products = Product::select('id', 'title', 'category_id', 'price')
             ->offset($request)
             ->paginate(12);
         // Convert the transformed collection to an array
@@ -91,11 +87,11 @@ class Product extends Model {
     }
 
     public static function getProductDetails($id) {
-        $product = Product::select('id', 'title', 'description', 'category_id')
+        $product = Product::select('id', 'title', 'description', 'category_id',
+            'price')
             ->where('id', $id)
             ->first();
 
-        $product->price_val = $product->price->pluck('price')->first();
         $product->category_val = $product->category->category_name;
         $product->colors_val = $product->colors->select('id', 'color_name')
             ->toArray();
@@ -110,7 +106,6 @@ class Product extends Model {
         unset($product->tags);
         unset($product->colors);
         unset($product->sizes);
-        unset($product->price);
         unset($product->category);
         unset($product->category_id);
 
@@ -124,9 +119,9 @@ class Product extends Model {
         return $this->belongsTo(Category::class);
     }
 
-    public function price() {
-        return $this->hasMany(Price::class);
-    }
+    //    public function price() {
+    //        return $this->hasMany(Price::class);
+    //    }
 
     public function colors() {
         return $this->belongsToMany(Color::class, 'product_colors',

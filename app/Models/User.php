@@ -48,6 +48,7 @@ class User extends Authenticatable {
 
     public static function getCartItems($id) {
         $user = User::find($id);
+
         $cart = $user->carts()->where('is_ordered', 0)->first();
         if ($cart === NULL) {
             return [
@@ -64,13 +65,13 @@ class User extends Authenticatable {
                 'cartitem_id' => $cartItem->id,
                 'title' => $product->title,
                 'image' => $product->images()->first()->image,
-                'price' => $product->price[0]->price,
+                'price' => $product->price,
                 'color' => $cartItem->color->color_name,
                 'size' => $cartItem->size->size_name,
                 'color_id' => $cartItem->color->id,
                 'size_id' => $cartItem->size->id,
                 'quantity' => $cartItem->quantity,
-                'total' => $product->price[0]->price * $cartItem->quantity,
+                'total' => $product->price * $cartItem->quantity,
             ];
         }
 

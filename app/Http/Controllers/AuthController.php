@@ -19,6 +19,8 @@ class AuthController extends Controller {
             if (Hash::check($request->input('password'),
                 $checkUser->password)) {
                 Session::put('authUser', $checkUser);
+                Log::informationLog('User logged in :'.$checkUser->username,
+                    $checkUser->id);
                 return redirect()->route('home');
             }
         }
@@ -37,7 +39,6 @@ class AuthController extends Controller {
     }
 
     public function checkRegister(RegisterRequest $request) {
-        //        dd($request->all());
         try {
             // Create a new User instance
             $newUser = new User();
@@ -77,6 +78,7 @@ class AuthController extends Controller {
     }
 
     public function logout() {
+        Log::informationLog('User logged out', Session::get('authUser')->id);
         Session::forget('authUser');
         return redirect()->route('home');
     }
