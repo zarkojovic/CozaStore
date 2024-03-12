@@ -24,6 +24,7 @@ use App\Models\City;
 use App\Models\Log;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
@@ -138,7 +139,17 @@ Route::middleware(['admin'])->prefix('admin')->group(function() {
                 now()->subDays(7))
             ->sum('total');
         // get $mostSoldProduct from the database
-        $mostSoldProduct = 1;
+        $mostOrderedProducts = DB::table('products')
+            ->join('cart_items', 'products.id', '=', 'cart_items.product_id')
+            ->join('carts', 'cart_items.cart_id', '=', 'carts.id')
+            ->where('carts.is_ordered', TRUE)
+            ->select('products.*', DB::raw('count(*) as order_count'))
+            ->groupBy('products.id', 'products.title', 'products.price',
+                'products.description', 'products.category_id',
+                'products.created_at', 'products.updated_at')
+            ->orderBy('order_count', 'desc')
+            ->get();
+        //        dd($mostOrderedProducts);
         // get $ordersLast7Days from the database
         $ordersLast7Days = Cart::where('is_ordered', 1)
             ->where('created_at', '>=',
@@ -149,7 +160,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function() {
             'usersLogins24Hours' => $usersLogins24Hours,
             'usersLast7Days' => $usersLast7Days,
             'moneyLast7Days' => $moneyLast7Days,
-            'mostSoldProduct' => $mostSoldProduct,
+            'mostSoldProduct' => $mostOrderedProducts ? $mostOrderedProducts[0]->title : 'No orders in the last 7 days.',
             'ordersLast7Days' => $ordersLast7Days,
         ]);
     })->name('admin.home');

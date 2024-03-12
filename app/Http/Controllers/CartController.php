@@ -93,7 +93,7 @@ class CartController extends Controller {
         }
 
         Log::informationLog('User removed product'.Product::find($request->product_id)
-                ->get()->title.' from cart', $user->id);
+                ->first()->title.' from cart', $user->id);
         return [
             'cartItems' => $cart->cartItems()->count(),
             'getCartItems' => User::getCartItems($user->id),

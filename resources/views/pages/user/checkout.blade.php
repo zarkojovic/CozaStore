@@ -40,7 +40,8 @@
                                     <tr class="table_row">
                                         <td class="column-1">
                                             <div>
-                                                <img src="{{$p['image']}}" alt="IMG" style="width: 60px;">
+                                                <img src="{{asset('/assets/images/'.$p['image'])}}" alt="IMG"
+                                                     style="width: 60px;">
                                             </div>
                                         </td>
                                         <td class="column-2">{{$p['title']}}</td>
@@ -78,28 +79,8 @@
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </table>
-
                         </div>
-
-                        {{--                        <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">--}}
-                        {{--                            <div class="flex-w flex-m m-r-20 m-tb-5">--}}
-                        {{--                                <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text"--}}
-                        {{--                                       name="coupon" placeholder="Coupon Code">--}}
-
-                        {{--                                <div--}}
-                        {{--                                    class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5">--}}
-                        {{--                                    Apply coupon--}}
-                        {{--                                </div>--}}
-                        {{--                            </div>--}}
-
-                        {{--                            <div--}}
-                        {{--                                class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">--}}
-                        {{--                                Update Cart--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-                        {{--                    --}}
                     </div>
                 </div>
             </div>
@@ -113,7 +94,7 @@
                         <div class="flex-w flex-t bor12 p-b-13">
                             <div class="size-208">
 								<span class="stext-110 cl2">
-									Subtotal:
+									Total:
 								</span>
                             </div>
 
@@ -123,69 +104,6 @@
 								</span>
                             </div>
                         </div>
-
-                        {{--                        <div class="flex-w flex-t bor12 p-t-15 p-b-30">--}}
-                        {{--                            <div class="size-208 w-full-ssm">--}}
-                        {{--								<span class="stext-110 cl2">--}}
-                        {{--									Shipping:--}}
-                        {{--								</span>--}}
-                        {{--                            </div>--}}
-
-                        {{--                            <div class="size-209 p-r-18 p-r-0-sm w-full-ssm">--}}
-                        {{--                                <p class="stext-111 cl6 p-t-2">--}}
-                        {{--                                    There are no shipping methods available. Please double check your address, or--}}
-                        {{--                                    contact us if you need any help.--}}
-                        {{--                                </p>--}}
-
-                        {{--                                <div class="p-t-15">--}}
-                        {{--									<span class="stext-112 cl8">--}}
-                        {{--										Calculate Shipping--}}
-                        {{--									</span>--}}
-
-                        {{--                                    <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">--}}
-                        {{--                                        <select class="js-select2" name="time">--}}
-                        {{--                                            <option>Select a country...</option>--}}
-                        {{--                                            <option>USA</option>--}}
-                        {{--                                            <option>UK</option>--}}
-                        {{--                                        </select>--}}
-                        {{--                                        <div class="dropDownSelect2"></div>--}}
-                        {{--                                    </div>--}}
-
-                        {{--                                    <div class="bor8 bg0 m-b-12">--}}
-                        {{--                                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state"--}}
-                        {{--                                               placeholder="State /  country">--}}
-                        {{--                                    </div>--}}
-
-                        {{--                                    <div class="bor8 bg0 m-b-22">--}}
-                        {{--                                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode"--}}
-                        {{--                                               placeholder="Postcode / Zip">--}}
-                        {{--                                    </div>--}}
-
-                        {{--                                    <div class="flex-w">--}}
-                        {{--                                        <div--}}
-                        {{--                                            class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer">--}}
-                        {{--                                            Update Totals--}}
-                        {{--                                        </div>--}}
-                        {{--                                    </div>--}}
-
-                        {{--                                </div>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-
-                        {{--                        <div class="flex-w flex-t p-t-27 p-b-33">--}}
-                        {{--                            <div class="size-208">--}}
-                        {{--								<span class="mtext-101 cl2">--}}
-                        {{--									Total:--}}
-                        {{--								</span>--}}
-                        {{--                            </div>--}}
-
-                        {{--                            <div class="size-209 p-t-1">--}}
-                        {{--								<span class="mtext-110 cl2">--}}
-                        {{--									$79.65--}}
-                        {{--								</span>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
-
                         <form action="{{route('order.store')}}" method="post">
                             @csrf
                             <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
@@ -203,70 +121,70 @@
 @section('custom-scripts')
     <script>
 
-        $(document).on('click', '.itemPlusMinus', function() {
-            let cartItemId = $(this).data('cart_id');
+      $(document).on('click', '.itemPlusMinus', function() {
+        let cartItemId = $(this).data('cart_id');
 
-            // get the value of the input field
-            let quantity = $(this).parent().find('.num-product').val();
+        // get the value of the input field
+        let quantity = $(this).parent().find('.num-product').val();
 
-            // check if the quantity is greater than 0
-            if (quantity <= 0 || quantity > 10) {
-                toastr.error('Quantity cannot be less than 1 and greater than 10');
+        // check if the quantity is greater than 0
+        if (quantity <= 0 || quantity > 10) {
+          toastr.error('Quantity cannot be less than 1 and greater than 10');
 
-                // if the quantity is less than 1, set it to 1 and if it is greater than 10, set it to 10
+          // if the quantity is less than 1, set it to 1 and if it is greater than 10, set it to 10
 
-                if (quantity <= 0) {
-                    $(this).parent().find('.num-product').val(1);
-                } else {
-                    $(this).parent().find('.num-product').val(10);
-                }
-                return;
-            }
+          if (quantity <= 0) {
+            $(this).parent().find('.num-product').val(1);
+          } else {
+            $(this).parent().find('.num-product').val(10);
+          }
+          return;
+        }
 
-            ajaxCallback(
-                '{{route('api.cart.add')}}',
-                'post',
-                {
-                    cart_item_id: cartItemId,
-                    quantity: quantity,
-                },
-                function(response) {
+        ajaxCallback(
+            '{{route('api.cart.add')}}',
+            'post',
+            {
+              cart_item_id: cartItemId,
+              quantity: quantity,
+            },
+            function(response) {
 
-                    toastr.success('Product added to cart');
-                    updateTotalPrice(response.totalPrice);
-                    // update the cart sidebar
-                    updateCheckout(response.products);
-                    updateCartSidebar(response);
-                },
-                function(error) {
-                    console.log(error);
-                },
-            );
-        });
+              toastr.success('Product added to cart');
+              updateTotalPrice(response.totalPrice);
+              // update the cart sidebar
+              updateCheckout(response.products);
+              updateCartSidebar(response);
+            },
+            function(error) {
+              console.log(error);
+            },
+        );
+      });
 
-        $(document).on('click', '.removeItem', function() {
-            let cartItemId = $(this).data('cartitem-id');
-            ajaxCallback(
-                '{{route('api.cart.remove')}}',
-                'post',
-                {
-                    cart_item_id: cartItemId,
-                },
-                function(response) {
-                    toastr.success('Product removed from cart');
-                    // update the cart sidebar
-                    updateCheckout(response.getCartItems.products);
-                    updateTotalPrice(response.getCartItems.totalPrice);
-                    updateCartSidebar(response);
-                },
-                function(error) {
-                    console.log(error);
-                },
-            );
-        });
+      $(document).on('click', '.removeItem', function() {
+        let cartItemId = $(this).data('cartitem-id');
+        ajaxCallback(
+            '{{route('api.cart.remove')}}',
+            'post',
+            {
+              cart_item_id: cartItemId,
+            },
+            function(response) {
+              toastr.success('Product removed from cart');
+              // update the cart sidebar
+              updateCheckout(response.getCartItems.products);
+              updateTotalPrice(response.getCartItems.totalPrice);
+              updateCartSidebar(response);
+            },
+            function(error) {
+              console.log(error);
+            },
+        );
+      });
 
-        function updateCheckout(items) {
-            let html = `<tr class="table_head">
+      function updateCheckout(items) {
+        let html = `<tr class="table_head">
                                     <th class="column-1">Product</th>
                                     <th class="column-2"></th>
                                     <th class="column-3">Price</th>
@@ -277,11 +195,11 @@
                                     <th class="column-8">Remove</th>
                                 </tr>`;
 
-            items.forEach(p => {
-                html += `<tr class="table_row">
+        items.forEach(p => {
+          html += `<tr class="table_row">
                                             <td class="column-1">
                                                 <div>
-                                                    <img src="${p.image}" alt="IMG" style="width: 60px;">
+                                                    <img src="{{asset('/assets/images/')}}/${p.image}" alt="IMG" style="width: 60px;">
                                                 </div>
                                             </td>
                                             <td class="column-2">${p.title}</td>

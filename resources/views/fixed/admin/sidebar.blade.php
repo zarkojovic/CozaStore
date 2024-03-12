@@ -98,17 +98,7 @@
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Addition</span></li>
         <li class="menu-item">
             <a
-                href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-                target="_blank"
-                class="menu-link"
-            >
-                <i class="menu-icon tf-icons bx bx-support"></i>
-                <div data-i18n="Support">Support</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a
-                href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                href="{{asset('documentation.pdf')}}"
                 target="_blank"
                 class="menu-link"
             >

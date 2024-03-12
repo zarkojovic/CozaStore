@@ -14,6 +14,8 @@
 @endsection
 
 @section('content')
+    <x-banner title="Contact" image="bg-02.jpg"/>
+    <x-breadcrumb :currentPage="'Contact'"/>
     <div id="contact" class="py-5">
         <div class="container">
             <div class="section-title text-center mb-5">

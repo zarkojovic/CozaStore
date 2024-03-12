@@ -16,12 +16,12 @@
             <tr>
                 @foreach($columns as $c)
                     @if($c =='avatar')
-                        <td><img src="{{asset('assets/images/original/'.$i->$c)}}" alt="avatar"
+                        <td><img src="{{asset('assets/images/'.$i->$c)}}" alt="avatar"
                                  class="avatar avatar-sm me-2"></td>
                         @continue
                     @endif
 
-                    @if(strlen($i->$c) > 20)
+                    @if(strlen($i->$c) > 20 && $c != 'log_message')
                         <td>{{substr($i->$c,0,20).'...'}}</td>
                         @continue
                     @else
@@ -51,4 +51,3 @@
     </table>
     {{$items->links()}}
 </div>
-

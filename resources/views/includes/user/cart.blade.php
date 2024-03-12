@@ -25,7 +25,7 @@
                             <li class="header-cart-item flex-w flex-t m-b-12">
                                 <div class="header-cart-item-img cartItem" data-id="{{$cartItem['id']}}"
                                      data-color-id="{{$cartItem['color_id']}}" data-size-id="{{$cartItem['size_id']}}">
-                                    <img src="{{asset('/assets/images')}}/{{$cartItem['image']}}" alt="IMG"/>
+                                    <img src="{{asset('/assets/images/'.$cartItem['image'])}}" alt="IMG"/>
                                 </div>
 
                                 <div class="header-cart-item-txt p-t-8">
@@ -44,7 +44,6 @@
                         @endforeach
                     @endif
             </ul>
-
             <div class="w-full">
                 <div class="header-cart-total w-full p-tb-40" id="cartSidebarPrice">Total:
                     ${{$userCarts['totalPrice']}}</div>
@@ -59,6 +58,7 @@
                 </div>
             </div>
             @else
+
                 <h1 class="h4 text-center">No items yet...</h1>
         </ul>
         @endif
@@ -89,7 +89,7 @@
                         @foreach($userWishlist as $wishItem)
                             <li class="header-cart-item flex-w flex-t m-b-12">
                                 <div class="header-cart-item-img wishlistItem" data-id="{{$wishItem->id}}">
-                                    <img src="{{asset('/assets/images')}}/{{$wishItem->images->first()->image}}"
+                                    <img src="{{asset('/assets/images/'.$wishItem->images->first()->image)}}"
                                          alt="IMG"/>
                                 </div>
                                 <div>
