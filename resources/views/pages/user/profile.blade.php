@@ -140,32 +140,29 @@
                 let url = form.attr('action');
                 let method = form.attr('method');
                 let formData = new FormData(this);
-                // CHECK IF THE IMAGE IS SELECTED
 
                 if (formData.get('avatar').size === 0) {
                     toastr.error('Please select an image');
                     return;
                 }
-                ajaxCallback(
-                    url,
-                    method,
-                    formData,
-                    function(response) {
-                        // REMOVE IMAGE FROM FILE INPUT
+
+                $.ajax({
+                    url: url,
+                    type: method,
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    success: function(response) {
                         form.find('input[type="file"]').val('');
-
-                        //CHANGE PROFILE IMAGE ON THE PAGE FROM THE UPLOADED IMAGE, NOT FROM THE SERVER
                         $('.img-account-profile').attr('src', URL.createObjectURL(formData.get('avatar')));
-
                         toastr.success('Profile image updated successfully');
                     },
-                    function(error) {
+                    error: function(error) {
                         console.log(error.responseJSON);
                         toastr.error('Profile image update failed');
                     },
-                );
+                });
             });
-
             // FORM FOR UPDATING PASSWORD
             $('#passwordChangeSubmit').click(function(e) {
                 e.preventDefault();

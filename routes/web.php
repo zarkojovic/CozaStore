@@ -16,6 +16,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Models\Cart;
@@ -178,31 +179,22 @@ Route::middleware(['admin'])->prefix('admin')->group(function() {
 });
 
 // NEUTRAL ROUTES
+// api routes
 Route::post('/api/getProducts',
     [ProductController::class, 'getProducts'])
     ->name('api.products');
 Route::post('/api/getProductInfo',
     [ProductController::class, 'getProductInfo'])
     ->name('api.product.info');
-
+// subscribe to newsletter
+Route::post('/subscribe', [NewsletterController::class, 'subscribe'])
+    ->name('api.subscribe');
+// Contact page
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 // Send contact mail
 Route::post('/send-email', [ContactController::class, 'sendMail'])
     ->name('contact.email.send');
 
-Route::get('/about', function() {
-    return 1;
-})->name('about');
-
-Route::get('/services', function() {
-    return 1;
-})->name('services');
-
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-
 Route::get('/author', function() {
     return view('pages.user.author');
 })->name('author');
-
-Route::get('/test', function() {
-    Session::forget('authUser');
-});

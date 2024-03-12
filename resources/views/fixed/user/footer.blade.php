@@ -46,14 +46,17 @@
                         <input
                             class="input1 bg-none plh1 stext-107 cl7"
                             type="text"
-                            name="email"
+                            name="newsletterMail"
+                            id="newletterMail"
                             placeholder="email@example.com"
                         />
                         <div class="focus-input1 trans-04"></div>
+                        <span class="text-danger" id="newsletterMailError"></span>
                     </div>
 
                     <div class="p-t-18">
                         <button
+                            id="subscribeButton"
                             class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04"
                         >
                             Subscribe

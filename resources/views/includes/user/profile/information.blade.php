@@ -13,7 +13,7 @@
                 <form action="{{route('user.profile.update')}}" method="post" enctype="multipart/form-data"
                       name="formProfileImage">
                     @csrf
-                    <input type="file" name="avatar" class="form-control">
+                    <input type="file" name="avatar" id="avatar" class="form-control">
                     <button type="submit" class="mt-3 btn btn-primary">Save</button>
                 </form>
             </div>

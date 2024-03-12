@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Log;
 use App\Models\Product;
+use App\Models\User;
 use App\Services\ImageHandleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +45,7 @@ class UserController extends Controller {
             // Start database transaction
             DB::beginTransaction();
 
-            $auth = Session::get('authUser');
+            $auth = User::find(Session::get('authUser')->id);
 
             // Remove country_id from the model
             unset($auth->country_id);
@@ -59,7 +60,6 @@ class UserController extends Controller {
                 if ($auth->avatar) {
                     ImageHandleService::remove($path, $auth->avatar);
                 }
-
                 // Set the new avatar
                 $auth->avatar = $fileName;
             }
@@ -86,6 +86,9 @@ class UserController extends Controller {
 
             // Save the changes to the database
             $auth->save();
+
+            Session::forget('authUser');
+            Session::put('authUser', $auth);
 
             Log::informationLog('User updated profile:'.$auth->username,
                 $auth->id);
@@ -147,5 +150,6 @@ class UserController extends Controller {
                 ->with('error', 'Failed to update password: '.$e->getMessage());
         }
     }
+
 
 }

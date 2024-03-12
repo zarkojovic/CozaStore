@@ -341,6 +341,33 @@
         toastr.success('Your message has been sent successfully');
     }
 
+    $(document).on('click', '#subscribeButton', function(e) {
+        e.preventDefault();
+        let email = $('#newletterMail').val();
+
+        // add regex to validate email
+        let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!emailRegex.test(email)) {
+            toastr.error('Invalid email address');
+            return;
+        }
+
+        ajaxCallback(
+            '{{route('api.subscribe')}}',
+            'post',
+            {
+                email: email,
+            },
+            function(response) {
+                console.log(response);
+                toastr.success('You have been subscribed successfully');
+                $('#newletterMail').val('');
+            },
+            function(error) {
+                toastr.error('An error occurred');
+            },
+        );
+    });
 
 </script>
 

@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder {
             ProductImageSeeder::class,
             PriceSeeder::class,
             ActionSeeder::class,
+            UserSeeder::class,
         ]);
     }
 
